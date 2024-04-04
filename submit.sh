@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #SBATCH --job-name=whisper
-#SBATCH --nodes=1
+#SBATCH --nodes=2
 #SBATCH --tasks-per-node=1
 #SBATCH --cpus-per-task=8
 #SBATCH --time=05-00:00:00
-#SBATCH --mem=6GB
+#SBATCH --mem=8GB
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=rasan@nyu.edu
 #SBATCH --output=slurm-%j.out
@@ -30,7 +30,7 @@ TMPDIR="$SCRATCH/tmp"
 
 # Get list of video files to run whisper
 FILES=(`find $INPUT_DIR -regextype posix-extended \
-	-iregex '.*\.(avi|mov|mp4)' | sort`)
+	-iregex '.*\.(avi|m4a|mov|mp4|wav)' | sort`)
 
 NUM_FILES=${#FILES[@]}
 
