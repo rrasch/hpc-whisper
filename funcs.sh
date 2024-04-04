@@ -1,5 +1,9 @@
 # funcs.sh
 
+# Calculate max runtime for video by multiplying the
+# duration of the video by this number
+MAX_RUNTIME_RATIO=5
+
 fmt_time()
 {
 	local T=$1
