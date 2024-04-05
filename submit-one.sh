@@ -4,8 +4,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --nodes=1
 #SBATCH --tasks-per-node=1
-#SBATCH --cpus-per-task=8
-#SBATCH --time=05-00:00:00
+#SBATCH --cpus-per-task=4
+#SBATCH --time=00:30:00
 #SBATCH --mem=8GB
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=rasan@nyu.edu
@@ -22,7 +22,7 @@ fi
 
 input_file=$1
 
-sbatch_dir="$(dirname "$(realpath "$0")")"
+slurm_dir="$(dirname "$(realpath "$0")")"
 input_dir="$(dirname "$(realpath "$input_file")")"
 name=$(basename -- "$input_file")
 name="${name%.*}"
@@ -35,15 +35,12 @@ source $HOME/venv/whisper/bin/activate
 export PATH=$HOME/bin:$PATH
 
 module purge
-# module load ffmpeg/$FFMPEG_VERSION
 module load cuda/$CUDA_VERSION
 
 set -u
 set -x
 
-TMPDIR="$SCRATCH/tmp"
-
-max_time=$(max_runtime "$input_file")
+export TMPDIR="$SCRATCH/tmp"
 
 srun \
 	--job-name="$name" \
@@ -51,19 +48,14 @@ srun \
 	--ntasks=1 \
 	--cpus-per-task=$SLURM_CPUS_PER_TASK \
 	--exclusive \
-	--time=$max_time \
 	whisper \
 	--threads $SLURM_CPUS_PER_TASK \
 	--language English \
 	--model small \
 	--model_dir $TMPDIR \
 	--output_dir $input_dir \
-	"$input_file" &
+	"$input_file"
 
-pid=$!
-
-echo "Waiting on pid $pid: '$input_file'"
-wait $pid
 RETVAL=$?
 
 echo "[EXIT_STATUS]: $RETVAL"
