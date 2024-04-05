@@ -58,11 +58,11 @@ srun \
 	--model small \
 	--model_dir $TMPDIR \
 	--output_dir $input_dir \
-	$input_file &
+	"$input_file" &
 
 pid=$!
 
-echo "Waiting on pid $pid: $input_file"
+echo "Waiting on pid $pid: '$input_file'"
 wait $pid
 RETVAL=$?
 
