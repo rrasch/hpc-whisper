@@ -4,7 +4,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --nodes=1
 #SBATCH --tasks-per-node=1
-#SBATCH --cpus-per-task=4
+#SBATCH --cpus-per-task=1
 #SBATCH --time=00:30:00
 #SBATCH --mem=8GB
 #SBATCH --mail-type=ALL
@@ -44,12 +44,7 @@ export TMPDIR="$SCRATCH/tmp"
 
 srun \
 	--job-name="$name" \
-	--nodes=1 \
-	--ntasks=1 \
-	--cpus-per-task=$SLURM_CPUS_PER_TASK \
-	--exclusive \
 	whisper \
-	--threads $SLURM_CPUS_PER_TASK \
 	--language English \
 	--model small \
 	--model_dir $TMPDIR \
